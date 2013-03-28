@@ -1,0 +1,146 @@
+#ifndef __std_process_included
+#define __std_process_included
+
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <errno.h>
+
+#include <bits/gen_process.h>
+#if defined(__unix__)
+#include <bits/posix_process.h>
+#endif
+
+namespace std {
+
+	class process
+	{
+	public:
+		class id
+		{
+		public:
+			typedef __bits::__process_impl<__pitag>::native_handle_type native_handle_type;
+		
+			id() = default;
+			explicit id(native_handle_type __h) : _M_process(__h)
+			{ }
+
+			friend bool operator==(const process::id& __a, const process::id& __b);
+
+			template<class _CharT, class _Traits>
+			friend basic_ostream<_CharT, _Traits>&
+			operator<<(basic_ostream<_CharT, _Traits>& __out, process::id __id);
+		private:
+			native_handle_type _M_process;
+			
+			friend class process;
+		};
+
+	private:
+		process::id _M_id;
+
+	public:
+		typedef id::native_handle_type native_handle_type;
+	
+		process(process&) = delete;
+		process(const process&) = delete;
+		process& operator=(const process&) = delete;
+
+		process() = default;
+
+		template <typename _F, typename... _Args>
+		process(_F&& __f, _Args&&... __args)
+		{
+			auto __callable = bind(forward<_F>(__f), forward<_Args>(__args)...);
+			native_handle_type __h = __bits::__process_impl<__pitag>::fork();
+			if (__h == 0) {
+				__callable();
+			} else if (__h < 0) {
+				__bits::__throw(errc::resource_unavailable_try_again, 
+					"failed to fork() the process");
+			} else {
+				_M_id = process::id(__h);
+			}
+		}
+
+		process(process&& __p) noexcept
+		{ swap(__p); }
+
+		~process()
+		{
+			if (joinable())
+				terminate();
+		}
+
+		process& operator=(process&& __p) noexcept
+		{
+			if (joinable())
+				terminate();
+			swap(__p);
+			return *this;
+		}
+
+		void swap(process& __p) noexcept;
+
+		void detach()
+		{
+			if (!joinable())
+				__bits::__throw(EINVAL, "cannot detach() detached process");
+			_M_id = process::id();
+		}
+
+		void join()
+		{
+			int __r = EINVAL;
+			if (joinable())
+				__r = __bits::__process_impl<__pitag>::join(_M_id._M_process);
+			if (__r)
+				__bits::__throw(__r, "failed to join() process");
+			_M_id = process::id();
+		}
+
+		bool joinable()
+		{
+			return !(_M_id == process::id());
+		}
+
+		native_handle_type native_handle() const noexcept
+		{ return _M_id._M_process; }
+
+		process::id get_id() const noexcept
+		{ return _M_id; }
+	};
+
+	namespace this_process {
+		inline process::id get_id()
+		{
+			process::native_handle_type h;
+			h = __bits::__process_impl<__pitag>::fetch_native_handle();
+			return process::id(h);
+		}
+
+		template <typename... _Args>
+		void exec(const string& __cmd, _Args&&... __args)
+		{
+			int __e = __bits::__process_impl<__pitag>::exec(__cmd, __args...);
+			__bits::__throw(__e, "failed to exec() command");
+		}
+	}
+
+	template<class _CharT, class _Traits>
+	inline basic_ostream<_CharT, _Traits>&
+	operator<<(basic_ostream<_CharT, _Traits>& __out, process::id __id)
+	{
+		if (__id == process::id())
+			return __out << "process::id of a non-executing process";
+		else
+			return __out << __id._M_process;
+	}
+	
+	inline bool operator==(const process::id& __a, const process::id& __b)
+	{
+		return __a._M_process == __b._M_process;
+	}
+}
+
+#endif // __std_process_included
