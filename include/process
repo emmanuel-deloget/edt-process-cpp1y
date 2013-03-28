@@ -54,7 +54,7 @@ namespace std {
 		process() = default;
 
 		template <typename _F, typename... _Args>
-		process(_F&& __f, _Args&&... __args)
+		explicit process(_F&& __f, _Args&&... __args)
 		{
 			auto __callable = bind(forward<_F>(__f), forward<_Args>(__args)...);
 			native_handle_type __h = __bits::__process_impl<__pitag>::fork();
