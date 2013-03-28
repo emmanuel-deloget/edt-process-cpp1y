@@ -26,6 +26,11 @@ namespace std {
 			{ }
 
 			friend bool operator==(const process::id& __a, const process::id& __b);
+			friend bool operator!=(const process::id& __a, const process::id& __b);
+			friend bool operator<(const process::id& __a, const process::id& __b);
+			friend bool operator>(const process::id& __a, const process::id& __b);
+			friend bool operator>=(const process::id& __a, const process::id& __b);
+			friend bool operator<=(const process::id& __a, const process::id& __b);
 
 			template<class _CharT, class _Traits>
 			friend basic_ostream<_CharT, _Traits>&
@@ -136,10 +141,36 @@ namespace std {
 		else
 			return __out << __id._M_process;
 	}
-	
+
+	// process::id operators
 	inline bool operator==(const process::id& __a, const process::id& __b)
 	{
 		return __a._M_process == __b._M_process;
+	}
+
+	inline bool operator!=(const process::id& __a, const process::id& __b)
+	{
+		return __a._M_process != __b._M_process;
+	}
+
+	inline bool operator<=(const process::id& __a, const process::id& __b)
+	{
+		return __a._M_process <= __b._M_process;
+	}
+
+	inline bool operator>=(const process::id& __a, const process::id& __b)
+	{
+		return __a._M_process >= __b._M_process;
+	}
+
+	inline bool operator<(const process::id& __a, const process::id& __b)
+	{
+		return __a._M_process < __b._M_process;
+	}
+
+	inline bool operator>(const process::id& __a, const process::id& __b)
+	{
+		return __a._M_process > __b._M_process;
 	}
 }
 
