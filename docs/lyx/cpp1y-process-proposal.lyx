@@ -1,0 +1,2126 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+A proposal for a standard process management library
+\end_layout
+
+\begin_layout Author
+Emmanuel Deloget
+\end_layout
+
+\begin_layout Section
+Preamble
+\end_layout
+
+\begin_layout Standard
+This document proposes an extension to the standard library.
+ 
+\end_layout
+
+\begin_layout Standard
+The goal of this extension it so provide components and functions that can
+ be used to create, manage and query processes.
+ 
+\end_layout
+
+\begin_layout Subsection
+Rationale
+\end_layout
+
+\begin_layout Standard
+Threads and processes are inherently similar.
+ From an operating system point of view, they may even be implemented using
+ the same mechanisms (as this is the case in the Linux operating system).
+ The main difference between processes and threads lies in the way they
+ manage virtual memory (when available): multiple threads in a process live
+ in the the same memory space, while multiple processes on a system live
+ in different memory space.
+ There are advantages and disadvantages to both:
+\end_layout
+
+\begin_layout Itemize
+Little-to-none security mechanism is available to protect the memory space
+ used by a thread from another thread.
+\end_layout
+
+\begin_layout Itemize
+Threads are lighter than processed.
+ This is due to the fact that when scheduling two different processes, the
+ operating system must manage their respective view of the memory and initialize
+ the hardware MMU accordingly.
+ Threads do not share this requirement as they have the same view of the
+ memory.
+\end_layout
+
+\begin_layout Standard
+This is of course a very high-level view since it does not take thread local
+ storage into account.
+\end_layout
+
+\begin_layout Standard
+Process management is an important part of system programming.
+ An implementation would allow C++ to be used to create background programs
+ (such as daemons in POSIX environment or services on Windows) or to start
+ other programs or utilities (as done by a shell or a launcher UI).
+ As of today, programmers have to use specific platform APIs to implement
+ such functionalities in their programs, making them difficult to port to
+ other system architectures.
+\end_layout
+
+\begin_layout Subsection
+Design consideration
+\end_layout
+
+\begin_layout Standard
+Since processes and threads are quite similar, it make sense to proposes
+ a similar interface for both classes.
+ I decided to give this path a try and I believe it worked quite well.
+ 
+\end_layout
+
+\begin_layout Section
+Proposal
+\end_layout
+
+\begin_layout Standard
+Please note that both the numbering scheme and the text below are of course
+ subject to changes.
+ They may not match the requirements of the text of the C++ standard.
+ Special Development notes are added to clarify some points or to denote
+ specific issues.
+ 
+\end_layout
+
+\begin_layout Subsection
+header <process> synopsys
+\end_layout
+
+\begin_layout Standard
+This section describe components that can be used to create and manage processes.
+ [
+\emph on
+ Note
+\emph default
+: these processes are intended to map one-to-one with operating system processes.
+ —
+\emph on
+ end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+namespace std {
+\end_layout
+
+\begin_layout Plain Layout
+
+ class process;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ void swap(process& x, process& y);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ namespace this_process {
+\end_layout
+
+\begin_layout Plain Layout
+
+  process::id get_id() noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+  template <typename Args...>
+\end_layout
+
+\begin_layout Plain Layout
+
+   void exec(const string& cmd, Args&&...
+ args);
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+class process
+\end_layout
+
+\begin_layout Standard
+The class process provides a mechanism to create a new operating system
+ process, to join with a process (i.e., wait for a process to complete), and
+ to perform other operations that manage and query the state of a process.
+ A process object uniquely represents a particular operating system process.
+ That representation may be transferred to other process objects in such
+ a way that no two process objects simultaneously represent the same operating
+ system process.
+ An operating system process is detached when no process object represents
+ that process.
+ Objects of class process can be in a state that does not represent an operating
+ system process.
+ [ 
+\emph on
+Note
+\emph default
+: A process object does not represent an operating system process after
+ default construction, after being moved from, or after a successful call
+ to detach or join.
+ — 
+\emph on
+end note
+\emph default
+ ] 
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+namespace std {
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+
+ class process {
+\end_layout
+
+\begin_layout Plain Layout
+
+ public:
+\end_layout
+
+\begin_layout Plain Layout
+
+  typedef implementation-defined 
+\end_layout
+
+\begin_layout Plain Layout
+
+   native_handle_type;
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+  class id;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  process(process&) = delete;
+\end_layout
+
+\begin_layout Plain Layout
+
+  process(const process&) = delete;
+\end_layout
+
+\begin_layout Plain Layout
+
+  process& operator=(const process&) = delete;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  process() = default;
+\end_layout
+
+\begin_layout Plain Layout
+
+  process(process&& __p) noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  template <typename F, typename ...Args>
+\end_layout
+
+\begin_layout Plain Layout
+
+   explicit
+\end_layout
+
+\begin_layout Plain Layout
+
+   process(F&& f, Args&&...
+ args);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  ~process();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  process& operator=(process&& __p) noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+  void swap(process& __t) noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  void detach();
+\end_layout
+
+\begin_layout Plain Layout
+
+  void join();
+\end_layout
+
+\begin_layout Plain Layout
+
+  bool joinable() const noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  process::id get_id() const noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+  native_handle_type native_handle() const noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+ };
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+class process:id
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+namespace std {
+\end_layout
+
+\begin_layout Plain Layout
+
+ class process::id 
+\end_layout
+
+\begin_layout Plain Layout
+
+ {
+\end_layout
+
+\begin_layout Plain Layout
+
+ public:
+\end_layout
+
+\begin_layout Plain Layout
+
+  id() noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+ };
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ bool operator==(process::id x, process::id y);
+\end_layout
+
+\begin_layout Plain Layout
+
+ bool operator!=(process::id x, process::id y);
+\end_layout
+
+\begin_layout Plain Layout
+
+ bool operator<=(process::id x, process::id y);
+\end_layout
+
+\begin_layout Plain Layout
+
+ bool operator>=(process::id x, process::id y);
+\end_layout
+
+\begin_layout Plain Layout
+
+ bool operator<(process::id x, process::id y);
+\end_layout
+
+\begin_layout Plain Layout
+
+ bool operator>(process::id x, process::id y);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ template <class Char, class Traits>
+\end_layout
+
+\begin_layout Plain Layout
+
+  basic_ostream<Char, Traits>&
+\end_layout
+
+\begin_layout Plain Layout
+
+  operator<<(
+\end_layout
+
+\begin_layout Plain Layout
+
+   basic_ostream<Char, Traits>& out,
+\end_layout
+
+\begin_layout Plain Layout
+
+   process::id id);
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An object of type process::id provides a unique identifier for each process
+ and a single distinct value for all process objects that do not represent
+ an operating system process.
+ Each operating system process has an associated process::id object that
+ is not equal to the process::id object of any other operating system process
+ and that is not equal to the process::id object of any std::process object
+ that does not represent any operating system process.
+ 
+\end_layout
+
+\begin_layout Standard
+[ 
+\emph on
+Development note
+\emph default
+: at this point, we do not take into account some very specific implementation
+ such as PID namespace in Linux.
+ Under Linux, two processes can share the same process id (PID) if they
+ do not belong to the same PID namespace.
+ Processes in a particular PID namespaces are unaware of the existence of
+ separate processes in a different namespace even if these processes has
+ the same PID.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Standard
+process::id shall be a trivially copyable class.
+ The library may reuse the value of a process::id of a terminated operating
+ system process that can no longer be joined.
+\end_layout
+
+\begin_layout Standard
+[ 
+\emph on
+Note
+\emph default
+: Relational operators allow process::id objects to be used as keys in associati
+ve containers.
+ — 
+\emph on
+end note
+\emph default
+ ] 
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+id() noexcept;
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: construct an object of type process::id.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postconditions
+\emph default
+: the object does not represent an operating system process.
+ [ 
+\emph on
+Development note
+\emph default
+: this doesn't mean that 0 is a good value to represent the process id.
+ Some systems may assignate PID 0 to a particular process.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+bool operator==(process::id x, process::id y);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: 
+\family typewriter
+true
+\family default
+ only if x and y represent the same operating system process or neither
+ x nor y represents any operating system process.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+bool operator!=(process::id x, process::id y);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: !(x == y)
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+bool operator<(process::id x, process::id y);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: A value such that operator< is a total ordering.
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+bool operator<=(process::id x, process::id y);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: (x < y) || (x == y)
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+bool operator>(process::id x, process::id y);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: !(x <= y)
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+bool operator>=(process::id x, process::id y);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: !(x < y)
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+template <class Char, class Traits>
+\begin_inset Newline newline
+\end_inset
+
+basic_ostream<Char, Traits>& 
+\begin_inset Newline newline
+\end_inset
+
+operator<<(basic_ostream<Char, Traits>& out,
+\begin_inset Newline newline
+\end_inset
+
+process::id id);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Inserts an unspecified text representation of id into out.
+ For two objects of type process::id x and y, if x == y the process::id
+ objects shall have the same text representation and if x != y the process::id
+ objects shall have distinct text representations.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: out.
+\end_layout
+
+\begin_layout Subsubsection
+process constructors
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+process() noexcept;
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Construct an object of type process that does not represent an operating
+ system process.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postcondition
+\emph default
+: 
+\family typewriter
+get_id() != id()
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+template <class F, class...
+ Args>
+\begin_inset Newline newline
+\end_inset
+
+explicit process(F&& f, Args&&...
+ args)
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires: 
+\family typewriter
+\emph default
+F
+\family default
+ and each 
+\family typewriter
+Ti
+\family default
+ in 
+\family typewriter
+Args
+\family default
+ shall satisfy the 
+\family typewriter
+MoveConstructible
+\family default
+ requirements.
+ 
+\family typewriter
+\emph on
+INVOKE ( DECAY_COPY ( std::forward<F>(f) ), DECAY_COPY ( std::forward<Args>
+ (args) ) ...
+ )
+\family default
+\emph default
+ shall be a valid expression.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Construct an object of type process.
+ The new operating system process executes 
+\family typewriter
+\emph on
+INVOKE (DECAY_COPY ( std::forward<F>(f)), DECAY_COPY ( std::forward<Args>
+ (args) ) ...)
+\family default
+\emph default
+ with the calls to 
+\family typewriter
+\emph on
+DECAY_COPY
+\family default
+\emph default
+ being evaluated in the constructing process.
+ Any return value from this invocation is ignored.
+ [ 
+\emph on
+Note
+\emph default
+: This implies that any exceptions not thrown from the invocation of the
+ copy of f will be thrown in the constructing process, not the new process.
+ — 
+\emph on
+end note
+\emph default
+ ] If the invocation of 
+\family typewriter
+\emph on
+INVOKE (DECAY_COPY ( std::forward<F>(f)), DECAY_COPY ( std::forward<Args>
+ (args) ) ...
+ )
+\family default
+\emph default
+ terminates with an uncaught exception, 
+\family typewriter
+std::terminate
+\family default
+ shall be called.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Synchronization
+\emph default
+: The completion of the invocation of the constructor synchronizes with
+ the beginning of the invocation of the copy of 
+\family typewriter
+f
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postcondition
+\emph default
+: 
+\family typewriter
+get_id() == id().
+
+\family default
+ 
+\family typewriter
+*this
+\family default
+ represents the newly started process.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: 
+\family typewriter
+system_error
+\family default
+ if unable to start the new thread.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Error
+\begin_inset space ~
+\end_inset
+
+conditions
+\emph default
+: [ 
+\emph on
+Development note
+\emph default
+: not specified yet.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\family typewriter
+thread(thread&& x) noexcept;
+\family default
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Constructs an object of type process from x, and sets x to a default construct
+ed state.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postconditions
+\emph default
+: x.get_id() == id() and get_id() returns the value of x.get_id() prior to
+ the start of construction.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+process destructor
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+~process(); 
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+joinable()
+\family default
+ then 
+\family typewriter
+terminate()
+\family default
+, otherwise no effects.
+ [ 
+\emph on
+Note
+\emph default
+: Either implicitly detaching or joining a 
+\family typewriter
+joinable()
+\family default
+ process in its destructor could result in difficult to debug correctness
+ (for detach) or performance (for join) bugs encountered only when an exception
+ is raised.
+ Thus the programmer must ensure that the destructor is never executed while
+ the process is still joinable.
+ — 
+\emph on
+end note
+\emph default
+ ] 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+process assignment
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+process& operator=(process&& x) noexcept;
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: If 
+\family typewriter
+joinable()
+\family default
+, calls 
+\family typewriter
+terminate()
+\family default
+.
+ Otherwise, assigns the state of 
+\family typewriter
+x
+\family default
+ to 
+\family typewriter
+*this
+\family default
+ and sets 
+\family typewriter
+x
+\family default
+ to a default constructed state.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postconditions
+\emph default
+: 
+\family typewriter
+x.get_id() == id()
+\family default
+ and 
+\family typewriter
+get_id()
+\family default
+ returns the value of 
+\family typewriter
+x.get_id()
+\family default
+ prior to the assignment.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+process members
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+void swap(process& x) noexcept;
+\family default
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Swaps the state of 
+\family typewriter
+*this
+\family default
+ and 
+\family typewriter
+x
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+bool joinable() const noexcept;
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: 
+\family typewriter
+get_id() != id()
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+void join();
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires
+\emph default
+: 
+\family typewriter
+joinable()
+\family default
+ is true.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Blocks until the process represented by 
+\family typewriter
+*this
+\family default
+ has completed.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Synchronization
+\emph default
+: The completion of the process represented by 
+\family typewriter
+*this
+\family default
+ synchronizes with the corresponding successful 
+\family typewriter
+join()
+\family default
+ return.
+ [ 
+\emph on
+Note
+\emph default
+: Operations on 
+\family typewriter
+*this
+\family default
+ are not synchronized.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postconditions
+\emph default
+: The process represented by *this has completed.
+ 
+\family typewriter
+get_id() == id()
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: 
+\family typewriter
+system_error
+\family default
+ when an exception is required
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Error
+\begin_inset space ~
+\end_inset
+
+conditions
+\emph default
+: [ 
+\emph on
+Development note
+\emph default
+: not specified yet.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+void detach();
+\family default
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires
+\emph default
+: 
+\family typewriter
+joinable()
+\family default
+ is true.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: The process represented by 
+\family typewriter
+*this
+\family default
+ continues execution without the calling process blocking.
+ When 
+\family typewriter
+detach()
+\family default
+ returns, 
+\family typewriter
+*this
+\family default
+ no longer represents the possibly continuing operating system process.
+ When the process previously represented by 
+\family typewriter
+*this
+\family default
+ ends execution, the implementation shall release any owned resources.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postcondition
+\emph default
+: 
+\family typewriter
+get_id() == id()
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: 
+\family typewriter
+system_error
+\family default
+ when an exception is required.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Error
+\begin_inset space ~
+\end_inset
+
+conditions
+\emph default
+: [ 
+\emph on
+Development note
+\emph default
+: not specified yet.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+id get_id() const noexcept; 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: A default constructed id object if 
+\family typewriter
+*this
+\family default
+ does not represent an operating system process, otherwise 
+\family typewriter
+this_process::get_id(
+\family default
+) for the operatnig system process represented by 
+\family typewriter
+*this
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+namespace this_process
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+namespace std {
+\end_layout
+
+\begin_layout Plain Layout
+
+ namespace this_process {
+\end_layout
+
+\begin_layout Plain Layout
+
+  process::id get_id() noexcept;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  template <typename Args...>
+\end_layout
+
+\begin_layout Plain Layout
+
+   void exec(const string& cmd, Args&&...
+ args);
+\end_layout
+
+\begin_layout Plain Layout
+
+ }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+process::id this_process::get_id() noexcept;
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: an objet of type 
+\family typewriter
+process::id
+\family default
+ that uniquely identifies the current process.
+ No other process shall have this id and this process shall always have
+ this id.
+ The object returned shall not compare equal to a default constructed 
+\family typewriter
+process::id
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+template <typename Args...>
+\begin_inset Newline newline
+\end_inset
+
+void exec(const string& cmd, Args&&...
+ args);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: replaces the current process image by a new process image.
+ 
+\family typewriter
+cmd
+\family default
+ specify the command to execute, and 
+\family typewriter
+args...
+
+\family default
+ is the command argument list.
+ If the underlying system call executes, the function never returns and
+ the new process image shall have the same id as the calling process.
+ [ 
+\emph on
+Development note
+\emph default
+: the choice of std::string to represent the command is due to the fact
+ that not all operating systems allows unicode strings to be used as commands.
+ An open question on this subject is to be found below.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: 
+\family typewriter
+system_error
+\family default
+ when the underlying system call fails to execute properly.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Error
+\begin_inset space ~
+\end_inset
+
+conditions
+\emph default
+: [ 
+\emph on
+Development note
+\emph default
+: not specified yet.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Technical considerations
+\end_layout
+
+\begin_layout Subsection
+About this_process::exec()
+\end_layout
+
+\begin_layout Standard
+The execve() system call which is used to implement this template function
+ has the following prototype:
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+int execve(const char *filename, 
+\end_layout
+
+\begin_layout Plain Layout
+
+ char *const argv[],
+\end_layout
+
+\begin_layout Plain Layout
+
+ char *const envp[]);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This proposal eludes the envp parameter for now (it may appear in a subsequent
+ proposal, see below).
+ 
+\end_layout
+
+\begin_layout Standard
+The argv argument is an array of char *const.
+ In order to derive this array from an args...
+ list, we need a specialized mechanism.
+ In the test implementation, I use std::stringstream (to convert any Args
+ type into its string representation) and I allocate the individual C strings
+ before I copy their content.
+ The relevant (tentative) code is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+void __unpack_to_strings(vector<char*>& __l)
+\end_layout
+
+\begin_layout Plain Layout
+
+{ __l.push_back(NULL); }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+template <typename _Arg0, typename...
+ _Args> 
+\end_layout
+
+\begin_layout Plain Layout
+
+void __unpack_to_strings(
+\end_layout
+
+\begin_layout Plain Layout
+
+   vector<char*>& __l, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   _Arg0&& __arg0, 
+\end_layout
+
+\begin_layout Plain Layout
+
+   _Args&&...
+ __args)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+ stringstream __stream;
+\end_layout
+
+\begin_layout Plain Layout
+
+ __stream << __arg0;
+\end_layout
+
+\begin_layout Plain Layout
+
+ string __out = __stream.str();
+\end_layout
+
+\begin_layout Plain Layout
+
+ char *__s = new char[__out.length()+1];
+\end_layout
+
+\begin_layout Plain Layout
+
+ copy(__out.begin(), __out.end(), __s);
+\end_layout
+
+\begin_layout Plain Layout
+
+ __s[__out.length()] = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+ __l.push_back(__s);
+\end_layout
+
+\begin_layout Plain Layout
+
+ __unpack_to_strings(__l, __args...);
+\end_layout
+
+\begin_layout Plain Layout
+
+} 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Such kind of code is likely to be pervasive in C++11 codebases
+\series default
+: transforming an argument pack into a container of things (whatever the
+ thing is) is very likely to be an algorithm which may be used quite often
+ by C++ programmers.
+ There might be room here for a standard utility function, although I understand
+ that a generic algorithm might be difficult to devise.
+ I may replace the code above by a better version (see below, not definitive)
+ but ideally, a standard algorithm would be far better.
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+template <class _Adder>
+\end_layout
+
+\begin_layout Plain Layout
+
+void __unpack_to(_Adder&& __adder) 
+\end_layout
+
+\begin_layout Plain Layout
+
+{ }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+template <
+\end_layout
+
+\begin_layout Plain Layout
+
+ class _Adder,
+\end_layout
+
+\begin_layout Plain Layout
+
+ class _Arg0,
+\end_layout
+
+\begin_layout Plain Layout
+
+ class...
+ _Args>
+\end_layout
+
+\begin_layout Plain Layout
+
+void __unpack_to(
+\end_layout
+
+\begin_layout Plain Layout
+
+ _Adder&& __adder,
+\end_layout
+
+\begin_layout Plain Layout
+
+ _Arg0&& __arg0,
+\end_layout
+
+\begin_layout Plain Layout
+
+ _Args&&...
+ __args)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+ __adder(__arg0);
+\end_layout
+
+\begin_layout Plain Layout
+
+ __unpack_to(__adder, __args...);
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another implementation would be based on a conversion from std::tuple<Args...>
+ (and thus would first require the creation of a tuple) to a container of
+ things - using either an implicit conversion or a user-supplied conversion.
+\end_layout
+
+\begin_layout Subsection
+Is it possible to implement fork() on a Windows system?
+\end_layout
+
+\begin_layout Standard
+The Windows process management API does not propose any strict equivalent
+ to POSIX fork().
+ This is outlined by Microsoft in.
+ In the same document, Microsoft endorse CreateProcess as a rough equivalent
+ to the fork/exec use case.
+ While this use case is often said to be prevalent, it's not the only use
+ case wa want to address.
+\end_layout
+
+\begin_layout Standard
+However, our research found that the implementation of fork() is still feasible:
+ 
+\end_layout
+
+\begin_layout Itemize
+The open source cygwin environment proposes a fork() function that works
+ like its POSIX counterpart.
+ 
+\end_layout
+
+\begin_layout Itemize
+Scilab for Windows (another open source project) has implemented its own
+ version of fork() to help its conversion to the Windows platform.
+ 
+\end_layout
+
+\begin_layout Itemize
+The Subsystem for Unix-based Applications (SUA) for Windows (also known
+ as Interix) proposes a fully compliant POSIX subsystem on top of the Windows
+ API, including a working fork() function.
+ 
+\end_layout
+
+\begin_layout Standard
+Both implementation leverage the public, low-level NT API to create a child
+ process that the relevant characteristics with its parent process.
+\end_layout
+
+\begin_layout Subsection
+Further implementation notes
+\end_layout
+
+\begin_layout Standard
+The full interface has already been implemented for both Linux and Windows
+ (a BSD implementation shall be quite similar to the Linux one), and the
+ full implementation has been open-sourced on github.
+ 
+\end_layout
+
+\begin_layout Standard
+The proposed interface and the implementation differ in one point: the list
+ of error conditions proposed above is not respected - I found easier to
+ just use the value of errno.
+ This is a bad idea as a future errno value set may contain values that
+ are not proposed by the current C++11 standard.
+ 
+\end_layout
+
+\begin_layout Section
+Open questions
+\end_layout
+
+\begin_layout Subsection
+Should the proposal implement environment variable management?
+\end_layout
+
+\begin_layout Standard
+I have the feeling that this would be an improvement over the current proposal.
+ Such extension would contain:
+\end_layout
+
+\begin_layout Itemize
+A way to retrieve the value of an environment variable (i.e.
+ a 
+\begin_inset Quotes eld
+\end_inset
+
+getenv()
+\begin_inset Quotes erd
+\end_inset
+
+ function).
+\end_layout
+
+\begin_layout Itemize
+A way to setup or kill a particular environment variable (i.e.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+setenv()
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+unsetenv()
+\begin_inset Quotes erd
+\end_inset
+
+ functions).
+\end_layout
+
+\begin_layout Itemize
+A way to list all environment variables (i.e.
+ an 
+\begin_inset Quotes eld
+\end_inset
+
+environ()
+\begin_inset Quotes erd
+\end_inset
+
+ function that would fetch the content of the POSIX C variable 
+\begin_inset Quotes eld
+\end_inset
+
+environ
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+If such extension is implemented in this proposal then another overload
+ of 
+\family typewriter
+this_process::exec()
+\family default
+ shall be needed as well.
+ 
+\end_layout
+
+\begin_layout Subsection
+Should exec() take a basic_string<> for its cmd parameter ?
+\end_layout
+
+\begin_layout Standard
+Windows _execv() function has a wide string counterpart named _wexecv().
+ Most posix systems don't have any equivalent to this function.
+ 
+\end_layout
+
+\begin_layout Standard
+I believe that UFT8 strings can be used to represent all possible command
+ names, but support for UTF16 command names might be of interest as well
+ on systems that support them.
+ It's possible to convert UTF16 to UTF8 but the conversion comes with a
+ performance penalty.
+ 
+\end_layout
+
+\end_body
+\end_document
