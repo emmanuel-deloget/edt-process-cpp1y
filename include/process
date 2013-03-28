@@ -25,12 +25,12 @@ namespace std {
 			explicit id(native_handle_type __h) : _M_process(__h)
 			{ }
 
-			friend bool operator==(const process::id& __a, const process::id& __b);
-			friend bool operator!=(const process::id& __a, const process::id& __b);
-			friend bool operator<(const process::id& __a, const process::id& __b);
-			friend bool operator>(const process::id& __a, const process::id& __b);
-			friend bool operator>=(const process::id& __a, const process::id& __b);
-			friend bool operator<=(const process::id& __a, const process::id& __b);
+			friend bool operator==(process::id __a, process::id __b);
+			friend bool operator!=(process::id __a, process::id __b);
+			friend bool operator<(process::id __a, process::id __b);
+			friend bool operator>(process::id __a, process::id __b);
+			friend bool operator>=(process::id __a, process::id __b);
+			friend bool operator<=(process::id __a, process::id __b);
 
 			template<class _CharT, class _Traits>
 			friend basic_ostream<_CharT, _Traits>&
@@ -143,32 +143,32 @@ namespace std {
 	}
 
 	// process::id operators
-	inline bool operator==(const process::id& __a, const process::id& __b)
+	inline bool operator==(process::id __a, process::id __b)
 	{
 		return __a._M_process == __b._M_process;
 	}
 
-	inline bool operator!=(const process::id& __a, const process::id& __b)
+	inline bool operator!=(process::id __a, process::id __b)
 	{
 		return __a._M_process != __b._M_process;
 	}
 
-	inline bool operator<=(const process::id& __a, const process::id& __b)
+	inline bool operator<=(process::id __a, process::id __b)
 	{
 		return __a._M_process <= __b._M_process;
 	}
 
-	inline bool operator>=(const process::id& __a, const process::id& __b)
+	inline bool operator>=(process::id __a, process::id __b)
 	{
 		return __a._M_process >= __b._M_process;
 	}
 
-	inline bool operator<(const process::id& __a, const process::id& __b)
+	inline bool operator<(process::id __a, process::id __b)
 	{
 		return __a._M_process < __b._M_process;
 	}
 
-	inline bool operator>(const process::id& __a, const process::id& __b)
+	inline bool operator>(process::id __a, process::id __b)
 	{
 		return __a._M_process > __b._M_process;
 	}
