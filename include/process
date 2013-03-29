@@ -7,6 +7,7 @@
 #include <errno.h>
 
 #include <bits/gen_process.h>
+#include <bits/gen_hash.h>
 #if defined(__unix__)
 #include <bits/posix_process.h>
 #endif
@@ -173,6 +174,12 @@ namespace std {
 		return __b._M_process < __a._M_process;
 	}
 
+	template <>
+	struct hash<process::id>
+	{
+		size_t operator()(process::id __id) const noexcept
+		{ return __details::__fnv1_hash_bytes()(&__id, sizeof(__id)); }
+	};
 }
 
 #endif // __std_process_included
