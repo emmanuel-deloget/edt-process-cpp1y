@@ -83,6 +83,18 @@ The goal of this extension it so provide components and functions that can
 \end_layout
 
 \begin_layout Subsection
+This is a working document
+\end_layout
+
+\begin_layout Standard
+This document outlines the different parts of the proposal but it's not
+ the proposal itself.
+ The proposal is written using LibreOffice and can be found on the Google
+ Code repository as odt/cpp1y-process-proposal.odt (and the corresponding
+ odt/cpp1y-process-proposal.pdf).
+\end_layout
+
+\begin_layout Subsection
 Rationale
 \end_layout
 
@@ -2060,16 +2072,23 @@ Further implementation notes
 \begin_layout Standard
 The full interface has already been implemented for both Linux and Windows
  (a BSD implementation shall be quite similar to the Linux one), and the
- full implementation has been open-sourced on github.
- 
+ full implementation has been open-sourced on Google Code:
 \end_layout
 
 \begin_layout Standard
-The proposed interface and the implementation differ in one point: the list
- of error conditions proposed above is not respected - I found easier to
- just use the value of errno.
- This is a bad idea as a future errno value set may contain values that
- are not proposed by the current C++11 standard.
+\begin_inset CommandInset href
+LatexCommand href
+name "https://code.google.com/p/edt-process-cpp1y/"
+target "https://code.google.com/p/edt-process-cpp1y/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As it's a PoC implementation it may differ from this proposal by several
+ points.
  
 \end_layout
 
