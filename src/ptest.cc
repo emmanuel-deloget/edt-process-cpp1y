@@ -34,6 +34,22 @@ int check_exec()
 	std::cout << std::endl;
 }
 
+void check_hash()
+{
+	std::cout << "======== " << __func__ << std::endl;
+
+	std::process p([=]() {
+		std::cout << "C this process    : " << std::this_process::get_id() << std::endl;
+		std::cout << "C this process H  : " << std::hex << std::hash<std::process::id>()(std::this_process::get_id()) << std::endl;
+		std::exit(EXIT_SUCCESS);
+	});
+	std::cout << "P this process    : " << std::this_process::get_id() << std::endl;
+	std::cout << "P this process H  : " << std::hex << std::hash<std::process::id>()(std::this_process::get_id()) << std::endl;
+	p.join();
+
+	std::cout << std::endl;
+}
+
 int main()
 {
 	std::cout << "======== LEGEND" << std::endl;
@@ -44,4 +60,5 @@ int main()
 
 	check_id();
 	check_exec();
+	check_hash();
 }
