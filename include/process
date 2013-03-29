@@ -1,9 +1,6 @@
 #ifndef __std_process_included
 #define __std_process_included
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
 #include <errno.h>
 
 #include <bits/gen_process.h>

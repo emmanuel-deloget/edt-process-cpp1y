@@ -6,6 +6,9 @@
 #include <sstream>
 #include <algorithm>
 
+#include <sys/wait.h>
+#include <unistd.h>
+
 namespace std {
 
 	namespace __bits {
