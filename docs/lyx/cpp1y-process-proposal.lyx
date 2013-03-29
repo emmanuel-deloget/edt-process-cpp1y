@@ -566,6 +566,25 @@ namespace std {
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\begin_layout Plain Layout
+
+ // hash support
+\end_layout
+
+\begin_layout Plain Layout
+
+ template <class T> struct hash;
+\end_layout
+
+\begin_layout Plain Layout
+
+ template <> struct hash<process::id>;
+\end_layout
+
+\begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -822,6 +841,35 @@ Effects
 Returns
 \emph default
 : out.
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+template <> struct hash<thread::id>;
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires
+\emph default
+: the template specialization shall meet the requirements of class template
+ hash.
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection
