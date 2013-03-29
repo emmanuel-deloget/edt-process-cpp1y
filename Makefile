@@ -1,4 +1,6 @@
-CFLAGS = -std=c++11 -I./include -g -O0
+ARCHFLAGS =
+CFLAGS = -std=c++11 -I./include -g -O0 $(ARCHFLAGS)
+LDFLAGS = $(ARCHFLAGS)
 
 all: ptest
 
