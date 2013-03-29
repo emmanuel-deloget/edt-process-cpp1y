@@ -150,17 +150,17 @@ namespace std {
 
 	inline bool operator!=(process::id __a, process::id __b)
 	{
-		return __a._M_process != __b._M_process;
+		return !(__a._M_process == __b._M_process);
 	}
 
 	inline bool operator<=(process::id __a, process::id __b)
 	{
-		return __a._M_process <= __b._M_process;
+		return !(__b._M_process < __b._M_process);
 	}
 
 	inline bool operator>=(process::id __a, process::id __b)
 	{
-		return __a._M_process >= __b._M_process;
+		return !(__a._M_process < __b._M_process);
 	}
 
 	inline bool operator<(process::id __a, process::id __b)
@@ -170,8 +170,9 @@ namespace std {
 
 	inline bool operator>(process::id __a, process::id __b)
 	{
-		return __a._M_process > __b._M_process;
+		return __b._M_process < __a._M_process;
 	}
+
 }
 
 #endif // __std_process_included
