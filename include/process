@@ -22,7 +22,7 @@ namespace std {
 		{
 		public:
 			typedef __bits::__process_impl<__itag>::native_handle_type native_handle_type;
-		
+
 			id() = default;
 			explicit id(native_handle_type __h) : _M_process(__h)
 			{ }
@@ -39,7 +39,7 @@ namespace std {
 			operator<<(basic_ostream<_CharT, _Traits>& __out, process::id __id);
 		private:
 			native_handle_type _M_process;
-			
+
 			friend class process;
 		};
 
@@ -48,7 +48,7 @@ namespace std {
 
 	public:
 		typedef id::native_handle_type native_handle_type;
-	
+
 		process(process&) = delete;
 		process(const process&) = delete;
 		process& operator=(const process&) = delete;
@@ -63,7 +63,7 @@ namespace std {
 			if (__h == 0) {
 				__callable();
 			} else if (__h < 0) {
-				__bits::__throw(errc::resource_unavailable_try_again, 
+				__bits::__throw(errc::resource_unavailable_try_again,
 					"failed to fork() the process");
 			} else {
 				_M_id = process::id(__h);

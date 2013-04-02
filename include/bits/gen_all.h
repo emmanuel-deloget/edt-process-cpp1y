@@ -13,7 +13,7 @@ namespace std {
 				throw system_error(make_error_code(__r), __w);
 			}
 		}
-		
+
 		void __throw(errc __ec, const char *__w)
 		{
 			throw system_error(make_error_code(__ec), __w);

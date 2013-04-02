@@ -35,19 +35,19 @@ namespace std {
 		struct __process_impl<__posix_tag>
 		{
 			typedef ::pid_t native_handle_type;
-			
+
 			static native_handle_type fetch_native_handle()
 			{
 				return ::getpid();
 			}
-			
+
 			static int join(native_handle_type __h)
 			{
 				if (waitpid(__h, NULL, 0) < 0)
 					return ESRCH;
 				return 0;
 			}
-			
+
 			static native_handle_type fork()
 			{
 				return ::fork();
