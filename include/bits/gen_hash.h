@@ -13,7 +13,7 @@
  */
 
 namespace std {
-	namespace __details {
+	namespace __bits {
 		template <size_t _Size>
 		struct __fnv1_gen_hash_impl;
 

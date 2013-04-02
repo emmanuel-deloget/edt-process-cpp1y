@@ -179,7 +179,7 @@ namespace std {
 	struct hash<process::id>
 	{
 		size_t operator()(process::id __id) const noexcept
-		{ return __details::__fnv1_hash_bytes()(&__id, sizeof(__id)); }
+		{ return __bits::__fnv1_hash_bytes()(&__id, sizeof(__id)); }
 	};
 }
 
