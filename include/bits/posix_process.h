@@ -1,5 +1,5 @@
-#ifndef bits_posix_process_h_included
-#define bits_posix_process_h_included
+#ifndef __bits_posix_process_h_included
+#define __bits_posix_process_h_included
 
 #include <vector>
 #include <string>
@@ -8,8 +8,6 @@
 
 #include <sys/wait.h>
 #include <unistd.h>
-
-#include <bits/posix_all.h>
 
 namespace std {
 
@@ -74,4 +72,4 @@ namespace std {
 	}
 }
 
-#endif // bits_posix_process_h_included
+#endif // __bits_posix_process_h_included

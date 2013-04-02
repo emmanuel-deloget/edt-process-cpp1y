@@ -5,9 +5,11 @@
 
 #include <errno.h>
 
+#include <bits/gen_all.h>
 #include <bits/gen_process.h>
 #include <bits/gen_hash.h>
 #if defined(__unix__)
+#include <bits/posix_all.h>
 #include <bits/posix_process.h>
 #endif
 
