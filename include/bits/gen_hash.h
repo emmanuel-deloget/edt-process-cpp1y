@@ -1,5 +1,5 @@
-#ifndef gen_hash_h_included
-#define gen_hash_h_included
+#ifndef __gen_hash_h_included
+#define __gen_hash_h_included
 
 /*
  * Hash functions
@@ -58,4 +58,4 @@ namespace std {
 	}
 }
 
-#endif // gen_hash_h_included
+#endif // __gen_hash_h_included
