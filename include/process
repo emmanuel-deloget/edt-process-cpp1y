@@ -1,6 +1,8 @@
 #ifndef __std_process_included
 #define __std_process_included
 
+#include <functional>
+
 #include <errno.h>
 
 #include <bits/gen_process.h>
