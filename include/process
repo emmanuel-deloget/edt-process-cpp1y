@@ -19,7 +19,7 @@ namespace std {
 		class id
 		{
 		public:
-			typedef __bits::__process_impl<__pitag>::native_handle_type native_handle_type;
+			typedef __bits::__process_impl<__itag>::native_handle_type native_handle_type;
 		
 			id() = default;
 			explicit id(native_handle_type __h) : _M_process(__h)
@@ -57,7 +57,7 @@ namespace std {
 		explicit process(_F&& __f, _Args&&... __args)
 		{
 			auto __callable = bind(forward<_F>(__f), forward<_Args>(__args)...);
-			native_handle_type __h = __bits::__process_impl<__pitag>::fork();
+			native_handle_type __h = __bits::__process_impl<__itag>::fork();
 			if (__h == 0) {
 				__callable();
 			} else if (__h < 0) {
@@ -98,7 +98,7 @@ namespace std {
 		{
 			int __r = EINVAL;
 			if (joinable())
-				__r = __bits::__process_impl<__pitag>::join(_M_id._M_process);
+				__r = __bits::__process_impl<__itag>::join(_M_id._M_process);
 			if (__r)
 				__bits::__throw(__r, "failed to join() process");
 			_M_id = process::id();
@@ -120,14 +120,14 @@ namespace std {
 		inline process::id get_id()
 		{
 			process::native_handle_type h;
-			h = __bits::__process_impl<__pitag>::fetch_native_handle();
+			h = __bits::__process_impl<__itag>::fetch_native_handle();
 			return process::id(h);
 		}
 
 		template <typename... _Args>
 		void exec(const string& __cmd, _Args&&... __args)
 		{
-			int __e = __bits::__process_impl<__pitag>::exec(__cmd, __args...);
+			int __e = __bits::__process_impl<__itag>::exec(__cmd, __args...);
 			__bits::__throw(__e, "failed to exec() command");
 		}
 	}

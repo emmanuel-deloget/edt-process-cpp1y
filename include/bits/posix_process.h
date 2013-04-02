@@ -9,11 +9,11 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <bits/posix_all.h>
+
 namespace std {
 
 	namespace __bits {
-		struct __posix_tag { };
-
 		void __unpack_to_strings(vector<char*>& __l)
 		{ __l.push_back(NULL); }
 
@@ -72,10 +72,6 @@ namespace std {
 
 		};
 	}
-
-	// process implementation tag (pitag)
-	typedef __bits::__posix_tag __pitag;
-
 }
 
 #endif // bits_posix_process_h_included
