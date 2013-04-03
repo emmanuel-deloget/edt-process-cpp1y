@@ -1,0 +1,50 @@
+#ifndef __std_named_mutex_included
+#define __std_named_mutex_included
+
+#include <bits/gen_mutex.h>
+#if defined(__unix__)
+#include <bits/posix_mutex.h>
+#endif
+
+namespace std {
+
+	class named_mutex
+	{
+	private:
+		typedef __bits::__nmimpl<__itag> __impl;
+		typedef __impl::__mutex_type __mutex_type;
+		__mutex_type _M_mutex;
+
+	public:
+		named_mutex(const std::string& name)
+		: _M_mutex(name)
+		{ }
+
+		~named_mutex()
+		{ }
+
+		named_mutex() = delete;
+		named_mutex(const named_mutex&) = delete;
+		named_mutex& operator=(const named_mutex&) = delete;
+
+		void lock()
+		{ _M_mutex.lock(); }
+
+		bool try_lock()
+		{ return _M_mutex.try_lock(); }
+
+		void unlock()
+		{ _M_mutex.unlock(); }
+
+		typedef __mutex_type::native_handle_type native_handle_type;
+		
+		native_handle_type native_handle()
+		{ return _M_mutex.native_handle(); }
+
+		std::string name() const
+		{ return _M_mutex.name(); }
+	};
+
+}
+
+#endif // __std_named_mutex_included
