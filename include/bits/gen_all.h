@@ -6,7 +6,7 @@
 namespace std {
 
 	namespace __bits {
-		void __throw(int __e, const char* __w)
+		inline void __throw(int __e, const char* __w)
 		{
 			if (__e) {
 				errc __r = static_cast<errc>(__e);
@@ -14,7 +14,7 @@ namespace std {
 			}
 		}
 
-		void __throw(errc __ec, const char *__w)
+		inline void __throw(errc __ec, const char *__w)
 		{
 			throw system_error(make_error_code(__ec), __w);
 		}
