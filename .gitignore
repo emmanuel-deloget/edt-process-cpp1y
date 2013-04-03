@@ -1,4 +1,5 @@
 ptest
 *.o
 *.lyx~
+*.lyx#
 *.a
