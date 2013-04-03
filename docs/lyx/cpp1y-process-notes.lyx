@@ -1713,6 +1713,164 @@ end note
 
 \end_layout
 
+\begin_layout Subsection
+header <named_mutex> synopsys
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+namespace std {
+\end_layout
+
+\begin_layout Plain Layout
+
+  class named_mutex;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+class named_mutex
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+namespace std {
+\end_layout
+
+\begin_layout Plain Layout
+
+  class named_mutex
+\end_layout
+
+\begin_layout Plain Layout
+
+  {
+\end_layout
+
+\begin_layout Plain Layout
+
+  public:
+\end_layout
+
+\begin_layout Plain Layout
+
+    named_mutex(const std::string& name);
+\end_layout
+
+\begin_layout Plain Layout
+
+    ~named_mutex();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    named_mutex() = delete;
+\end_layout
+
+\begin_layout Plain Layout
+
+    named_mutex(const named_mutex&) = delete;
+\end_layout
+
+\begin_layout Plain Layout
+
+    named_mutex& operator=(const named_mutex&) = delete;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    void lock();
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool try_lock();
+\end_layout
+
+\begin_layout Plain Layout
+
+    void unlock();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    typedef implementation-defined native_handle_type;
+\end_layout
+
+\begin_layout Plain Layout
+
+    native_handle_type native_handle();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    std::string name() const;
+\end_layout
+
+\begin_layout Plain Layout
+
+  };
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Technical considerations
 \end_layout
