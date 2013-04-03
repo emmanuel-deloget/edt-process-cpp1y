@@ -1,3 +1,4 @@
 ptest
-ptest.o
+*.o
 *.lyx~
+*.a
