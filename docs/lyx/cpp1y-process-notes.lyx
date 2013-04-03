@@ -181,7 +181,7 @@ This section describe components that can be used to create and manage processes
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -252,7 +252,7 @@ namespace std {
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -289,7 +289,7 @@ end note
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -461,7 +461,7 @@ namespace std {
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -469,13 +469,6 @@ namespace std {
 
 \begin_layout Subsubsection
 class process:id
-\end_layout
-
-\begin_layout Standard
-\begin_inset VSpace medskip
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -606,7 +599,7 @@ namespace std {
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -663,7 +656,7 @@ end note
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace bigskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -703,7 +696,7 @@ end note
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -730,7 +723,7 @@ true
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -747,7 +740,7 @@ Returns
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -764,7 +757,7 @@ Returns
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -781,7 +774,7 @@ Returns
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -798,7 +791,7 @@ Returns
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -815,7 +808,7 @@ Returns
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -856,7 +849,7 @@ Returns
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -878,7 +871,7 @@ Requires
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -914,7 +907,7 @@ get_id() != id()
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1074,7 +1067,7 @@ end note
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1105,7 +1098,7 @@ Postconditions
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1152,7 +1145,7 @@ end note
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1220,7 +1213,7 @@ x.get_id()
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1256,7 +1249,7 @@ x
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1279,7 +1272,7 @@ get_id() != id()
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1394,7 +1387,7 @@ end note
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1496,7 +1489,7 @@ end note
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1530,7 +1523,7 @@ this_process::get_id(
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1591,7 +1584,7 @@ namespace std {
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1624,7 +1617,7 @@ process::id
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1707,7 +1700,7 @@ end note
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1734,6 +1727,21 @@ namespace std {
 
 \begin_layout Plain Layout
 
+  class named_recursive_mutex;
+\end_layout
+
+\begin_layout Plain Layout
+
+  class named_timed_mutex;
+\end_layout
+
+\begin_layout Plain Layout
+
+  class named_timed_recursive_mutex;
+\end_layout
+
+\begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -1743,10 +1751,467 @@ namespace std {
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+named mutex types
+\emph default
+ are the following standard library types
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+std::named_mutex; 
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+std::named_recursive_mutex
+\family default
+;
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+std::named_timed_mutex;
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+std::named_recursive_timed_mutex
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+They shall meet the requirements set out in this section.
+ In this description, 
+\family typewriter
+nm
+\family default
+ denotes an object of named mutex type.
+\end_layout
+
+\begin_layout Standard
+The named mutex types shall meet the 
+\family typewriter
+Lockable
+\family default
+ requirements.
+\end_layout
+
+\begin_layout Standard
+The mutex types shall be 
+\family typewriter
+Destructible
+\family default
+.
+ If initialization of an object of a mutex type fails, an exception of type
+ 
+\family typewriter
+system_error
+\family default
+ shall be thrown.
+ The mutex types shall not be copyable or movable.
+ [ 
+\emph on
+Note
+\emph default
+: named mutex types are not 
+\family typewriter
+DefaultConstructible
+\family default
+.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Standard
+[ 
+\emph on
+Development note
+\emph default
+: The error conditions for error codes, if any, reported by member functions
+ of the named mutex types are not yet specified.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Standard
+The implementation shall provide lock and unlock operations, as described
+ below.
+ For purposes of determining the existence of a data race, these behave
+ as atomic operations.
+ The lock and unlock operations on a single named mutex shall appear to
+ occur in a single total order.
+ [ 
+\emph on
+Note:
+\emph default
+ this can be viewed as the modification order of the named mutex.
+ — 
+\emph on
+end note 
+\emph default
+] [ 
+\emph on
+Note:
+\emph default
+ Construction and destruction of an object of a named mutex type need not
+ be thread-safe; other synchronization should be used to ensure that named
+ mutex objects are initialized and visible to other processes.
+ — 
+\emph on
+end note 
+\emph default
+] 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The expression 
+\family typewriter
+nm.lock()
+\family default
+ shall be well-formed and have the following semantics: 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires
+\emph default
+: If 
+\family typewriter
+nm
+\family default
+ is of type 
+\family typewriter
+std::named_mutex
+\family default
+ or 
+\family typewriter
+std::named_timed_mutex
+\family default
+, the calling thread does not own the mutex.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Blocks the calling thread until ownership of the mutex can be obtained
+ for the calling thread.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Postcondition
+\emph default
+: The calling thread owns the mutex.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Return
+\emph default
+
+\begin_inset space ~
+\end_inset
+
+
+\emph on
+type
+\emph default
+: void 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Synchronization
+\emph default
+: Prior 
+\family typewriter
+unlock()
+\family default
+ operations on the same object shall synchronize with this operation.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: 
+\family typewriter
+system_error
+\family default
+ when an exception is required.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Error
+\begin_inset space ~
+\end_inset
+
+conditions
+\emph default
+: [ 
+\emph on
+Development note
+\emph default
+: not specified yet.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The expression 
+\family typewriter
+nm.try_lock()
+\family default
+ shall be well-formed and have the following semantics: 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires
+\emph default
+: If 
+\family typewriter
+nm
+\family default
+ is of type 
+\family typewriter
+std::named_mutex
+\family default
+ or 
+\family typewriter
+std::named_timed_mutex
+\family default
+, the calling thread does not own the mutex.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Attempts to obtain ownership of the mutex for the calling thread without
+ blocking.
+ If ownership is not obtained, there is no effect and 
+\family typewriter
+try_lock()
+\family default
+ immediately returns.
+ An implementation may fail to obtain the lock even if it is not held by
+ any other thread.
+ [ 
+\emph on
+Note
+\emph default
+: This spurious failure is normally uncommon, but allows interesting implementat
+ions based on a simple compare and exchange.
+ — 
+\emph on
+end note
+\emph default
+ ] An implementation should ensure that 
+\family typewriter
+try_lock()
+\family default
+ does not consistently return false in the absence of contending mutex acquisiti
+ons.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Return
+\emph default
+
+\begin_inset space ~
+\end_inset
+
+type: 
+\family typewriter
+bool
+\family default
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Returns
+\emph default
+: 
+\family typewriter
+true
+\family default
+ if ownership of the mutex was obtained for the calling thread, otherwise
+ 
+\family typewriter
+false
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Synchronization
+\emph default
+: If 
+\family typewriter
+try_lock()
+\family default
+ returns true, prior unlock() operations on the same object synchronize
+ with this operation.
+ [ 
+\emph on
+Note
+\emph default
+: Since 
+\family typewriter
+lock()
+\family default
+ does not synchronize with a failed subsequent 
+\family typewriter
+try_lock()
+\family default
+, the visibility rules are weak enough that little would be known about
+ the state after a failure, even in the absence of spurious failures.
+ — 
+\emph on
+end note
+\emph default
+ ] 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: Nothing.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The expression 
+\family typewriter
+nm.unlock()
+\family default
+ shall be well-formed and have the following semantics: 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires
+\emph default
+: The calling thread shall own the mutex.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: Releases the calling thread’s ownership of the mutex.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Return
+\begin_inset space ~
+\end_inset
+
+type
+\emph default
+: 
+\family typewriter
+void
+\family default
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Synchronization
+\emph default
+: This operation synchronizes with subsequent lock operations that obtain
+ ownership on the same object.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: Nothing.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -1818,12 +2283,12 @@ namespace std {
 
 \begin_layout Plain Layout
 
-    bool try_lock();
+    bool try_lock() noexcept;
 \end_layout
 
 \begin_layout Plain Layout
 
-    void unlock();
+    void unlock() noexcept;
 \end_layout
 
 \begin_layout Plain Layout
@@ -1865,10 +2330,107 @@ namespace std {
 \end_layout
 
 \begin_layout Subsubsection*
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The class 
+\family typewriter
+named_mutex
+\family default
+ provides a non-recursive named mutex with exclusive ownership semantics.
+ If one thread in a process owns a named mutex object, attempts by another
+ thread in the same or in another process to acquire ownership of that object
+ will fail (for 
+\family typewriter
+try_lock()
+\family default
+) or block (for l
+\family typewriter
+ock()
+\family default
+) until the owning thread has released ownership with a call to 
+\family typewriter
+unlock()
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+[ 
+\emph on
+Note
+\emph default
+: After a thread A has called 
+\family typewriter
+unlock()
+\family default
+, releasing a named mutex, it is possible for another thread B to lock the
+ same named mutex, observe that it is no longer in use, unlock it, and destroy
+ it, before thread A appears to have returned from its unlock call.
+ Implementations are required to handle such scenarios correctly, as long
+ as thread A doesn’t access the named mutex after the unlock call returns.
+ These cases typically occur when a reference-counted object contains a
+ mutex that is used to protect the reference count.
+ — 
+\emph on
+end note
+\emph default
+ ] 
+\end_layout
+
+\begin_layout Standard
+The class 
+\family typewriter
+named_mutex
+\family default
+ shall satisfy all the 
+\family typewriter
+NamedMutex
+\family default
+ requirements.
+ 
+\end_layout
+
+\begin_layout Standard
+[ 
+\emph on
+Note
+\emph default
+: A program may deadlock if the thread that owns a named mutex object calls
+ 
+\family typewriter
+lock()
+\family default
+ on that object.
+ If the implementation can detect the deadlock, a 
+\family typewriter
+resource_deadlock_would_occur
+\family default
+ error condition may be observed.
+ — 
+\emph on
+end note
+\emph default
+ ] 
+\end_layout
+
+\begin_layout Standard
+The behavior of a program is undefined if it destroys a 
+\family typewriter
+named_mutex
+\family default
+ object owned by any thread in any process or a thread in any process terminates
+ while owning a 
+\family typewriter
+named_mutex
+\family default
+ object.
+ 
 \end_layout
 
 \begin_layout Section
@@ -1885,7 +2447,7 @@ The execve() system call which is used to implement this template function
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1917,7 +2479,7 @@ int execve(const char *filename,
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -1940,7 +2502,7 @@ The argv argument is an array of char *const.
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -2052,7 +2614,7 @@ void __unpack_to_strings(
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -2070,7 +2632,7 @@ Such kind of code is likely to be pervasive in C++11 codebases
  that a generic algorithm might be difficult to devise.
  I may replace the code above by a better version (see below, not definitive)
  but ideally, a standard algorithm would be far better.
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
@@ -2168,7 +2730,7 @@ void __unpack_to(
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace medskip
+\begin_inset VSpace smallskip
 \end_inset
 
 
