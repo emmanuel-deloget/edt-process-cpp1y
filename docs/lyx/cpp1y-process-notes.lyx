@@ -199,6 +199,15 @@ namespace std {
 
 \begin_layout Plain Layout
 
+ enum struct terminate_flag; 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
  class process;
 \end_layout
 
@@ -239,6 +248,72 @@ namespace std {
 \begin_layout Plain Layout
 
  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+enum struct terminate_flag
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+namespace std {
+\end_layout
+
+\begin_layout Plain Layout
+
+  enum struct terminate_flag
+\end_layout
+
+\begin_layout Plain Layout
+
+  {
+\end_layout
+
+\begin_layout Plain Layout
+
+    terminate_none,
+\end_layout
+
+\begin_layout Plain Layout
+
+    terminate_child,
+\end_layout
+
+\begin_layout Plain Layout
+
+    terminate_parent,
+\end_layout
+
+\begin_layout Plain Layout
+
+    terminate_both
+\end_layout
+
+\begin_layout Plain Layout
+
+  };
 \end_layout
 
 \begin_layout Plain Layout
@@ -376,6 +451,31 @@ namespace std {
 \begin_layout Plain Layout
 
   template <typename F, typename ...Args>
+\end_layout
+
+\begin_layout Plain Layout
+
+   explicit
+\end_layout
+
+\begin_layout Plain Layout
+
+   process(terminate_flag tflag, 
+\end_layout
+
+\begin_layout Plain Layout
+
+    F&& f, Args&&...
+ args);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ template <typename F, typename ...Args>
 \end_layout
 
 \begin_layout Plain Layout
@@ -917,7 +1017,7 @@ template <class F, class...
 \begin_inset Newline newline
 \end_inset
 
-explicit process(F&& f, Args&&...
+explicit process(terminate_flag tf, F&& f, Args&&...
  args)
 \end_layout
 
@@ -999,6 +1099,40 @@ std::terminate
 \family default
  shall be called.
  
+\begin_inset Newline newline
+\end_inset
+
+If the expression (
+\family typewriter
+tf == terminate_flag::terminate_child || tf == terminate_flag::terminate_both
+\family default
+) evaluate to 
+\family typewriter
+true
+\family default
+, the new operating system process calls 
+\family typewriter
+std::exit()
+\family default
+ after the invocation.
+ 
+\begin_inset Newline newline
+\end_inset
+
+If the expression (
+\family typewriter
+tf == terminate_flag::terminate_parent || tf == terminate_flag::terminate_both
+\family default
+) evaluate to 
+\family typewriter
+true
+\family default
+, the parent operating system process calls 
+\family typewriter
+std::exit()
+\family default
+ if the creation of the new operating system process succeeds.
+ 
 \end_layout
 
 \begin_layout Description
@@ -1070,6 +1204,72 @@ end note
 \begin_inset VSpace smallskip
 \end_inset
 
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+template <class F, class...
+ Args>
+\begin_inset Newline newline
+\end_inset
+
+explicit process(F&& f, Args&&...
+ args)
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Requires: 
+\family typewriter
+\emph default
+F
+\family default
+ and each 
+\family typewriter
+Ti
+\family default
+ in 
+\family typewriter
+Args
+\family default
+ shall satisfy the 
+\family typewriter
+MoveConstructible
+\family default
+ requirements.
+ 
+\family typewriter
+\emph on
+INVOKE ( DECAY_COPY ( std::forward<F>(f) ), DECAY_COPY ( std::forward<Args>
+ (args) ) ...
+ )
+\family default
+\emph default
+ shall be a valid expression.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: 
+\family typewriter
+process(terminate_flag::terminate_child, f, args...)
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
 
 \family typewriter
 thread(thread&& x) noexcept;
@@ -2783,6 +2983,107 @@ The Subsystem for Unix-based Applications (SUA) for Windows (also known
 \begin_layout Standard
 Both implementation leverage the public, low-level NT API to create a child
  process that the relevant characteristics with its parent process.
+\end_layout
+
+\begin_layout Subsection
+About std::terminate_flag
+\end_layout
+
+\begin_layout Standard
+The typical use of std::process is similar to the following: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+#include <process>
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+int main()
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  process p([]() {
+\end_layout
+
+\begin_layout Plain Layout
+
+    do_something();
+\end_layout
+
+\begin_layout Plain Layout
+
+    std::exit(EXIT_SUCCESS);
+\end_layout
+
+\begin_layout Plain Layout
+
+  });
+\end_layout
+
+\begin_layout Plain Layout
+
+  // continue parent code
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The problem with this code is that all objets with automatic storage duration
+ created in the lambda will not be destroyed.
+ This may result in a resource leak (this is the case when the object creates
+ a permanent resource such as a named shm object in Linux).
+ 
+\end_layout
+
+\begin_layout Standard
+Moreoever, tests showed that the exit() call is often forgotten in that
+ case.
+ 
+\end_layout
+
+\begin_layout Standard
+The proposed solution is to introduce a flag that will hint the implementation
+ on what to do after the child process has been created and/or executed.
+ 
 \end_layout
 
 \begin_layout Subsection
