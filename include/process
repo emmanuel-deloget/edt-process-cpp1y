@@ -2,8 +2,8 @@
 #define __std_process_included
 
 #include <functional>
-
-#include <errno.h>
+#include <cstdlib>
+#include <cerrno>
 
 #include <bits/gen_all.h>
 #include <bits/gen_process.h>
@@ -14,6 +14,14 @@
 #endif
 
 namespace std {
+
+	enum struct terminate_flag
+	{ 
+		terminate_none, 
+		terminate_child, 
+		terminate_parent, 
+		terminate_both 
+	};
 
 	class process
 	{
@@ -45,6 +53,27 @@ namespace std {
 
 	private:
 		process::id _M_id;
+		
+		template <class _Callable>
+		void embbed(_Callable __callable)
+		{
+			__callable();
+		}
+
+		void do_exit() const noexcept
+		{ exit(0); }
+
+		bool shall_terminate_parent(terminate_flag __tf) const noexcept
+		{
+			return (__tf == terminate_flag::terminate_parent) || 
+				(__tf == terminate_flag::terminate_both);
+		}
+
+		bool shall_terminate_child(terminate_flag __tf) const noexcept
+		{
+			return (__tf == terminate_flag::terminate_child) || 
+				(__tf == terminate_flag::terminate_both);
+		}
 
 	public:
 		typedef id::native_handle_type native_handle_type;
@@ -56,19 +85,28 @@ namespace std {
 		process() = default;
 
 		template <typename _F, typename... _Args>
-		explicit process(_F&& __f, _Args&&... __args)
+		explicit process(terminate_flag __tf, _F&& __f, _Args&&... __args)
 		{
 			auto __callable = bind(forward<_F>(__f), forward<_Args>(__args)...);
 			native_handle_type __h = __bits::__process_impl<__itag>::fork();
 			if (__h == 0) {
-				__callable();
+				embbed(__callable);
+				if (shall_terminate_child(__tf))
+					do_exit();
 			} else if (__h < 0) {
 				__bits::__throw(errc::resource_unavailable_try_again,
 					"failed to fork() the process");
 			} else {
+				if (shall_terminate_parent(__tf))
+					do_exit();
 				_M_id = process::id(__h);
 			}
 		}
+		
+		template <typename _F, typename... _Args>
+		explicit process(_F&& __f, _Args&&... __args)
+		: process(terminate_flag::terminate_child, __f, __args...)
+		{ }
 
 		process(process&& __p) noexcept
 		{ swap(__p); }

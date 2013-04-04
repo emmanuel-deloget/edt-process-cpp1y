@@ -13,7 +13,6 @@ int check_id()
 
 	std::process p([=]() {
 		std::cout << "C this process    : " << std::this_process::get_id() << std::endl;
-		std::exit(EXIT_SUCCESS);
 	});
 	std::cout << "P this process    : " << std::this_process::get_id() << std::endl;
 	std::cout << "P before join()   : " << p.get_id() << std::endl;
@@ -45,7 +44,6 @@ void check_hash()
 	std::process p([=]() {
 		std::cout << "C this process    : " << std::this_process::get_id() << std::endl;
 		std::cout << "C this process H  : " << std::hex << std::hash<std::process::id>()(std::this_process::get_id()) << std::dec << std::endl;
-		std::exit(EXIT_SUCCESS);
 	});
 	std::cout << "P this process    : " << std::this_process::get_id() << std::endl;
 	std::cout << "P this process H  : " << std::hex << std::hash<std::process::id>()(std::this_process::get_id()) << std::dec << std::endl;
@@ -71,7 +69,6 @@ void check_named_mutex()
 			n.unlock();
 			std::this_thread::sleep_for(std::chrono::milliseconds(133));
 		}
-		std::exit(EXIT_SUCCESS);
 	});
 
 	std::process p1([=](){
@@ -86,7 +83,6 @@ void check_named_mutex()
 			n.unlock();
 			std::this_thread::sleep_for(std::chrono::milliseconds(85));
 		}
-		std::exit(EXIT_SUCCESS);
 	});
 
 	std::process p2([=](){
@@ -101,7 +97,6 @@ void check_named_mutex()
 			n.unlock();
 			std::this_thread::sleep_for(std::chrono::milliseconds(200));
 		}
-		std::exit(EXIT_SUCCESS);
 	});
 
 	p0.join();
