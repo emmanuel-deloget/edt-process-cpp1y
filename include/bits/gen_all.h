@@ -18,6 +18,31 @@ namespace std {
 		{
 			throw system_error(make_error_code(__ec), __w);
 		}
+
+		inline void __do_exit(int __e) noexcept
+		{
+			exit(__e);
+		}
+
+		template <class _C0, class _C1>
+		struct __exec
+		{
+			static int invoke(_C1 __c)
+			{
+				__c();
+				return 0;
+			}
+		};
+
+		template <class _C1>
+		struct __exec<int, _C1>
+		{
+			static int invoke(_C1 __c)
+			{
+				return __c();
+			}
+		};
+
 	}
 
 }

@@ -54,15 +54,6 @@ namespace std {
 	private:
 		process::id _M_id;
 		
-		template <class _Callable>
-		void embbed(_Callable __callable)
-		{
-			__callable();
-		}
-
-		void do_exit() const noexcept
-		{ exit(0); }
-
 		bool shall_terminate_parent(terminate_flag __tf) const noexcept
 		{
 			return (__tf == terminate_flag::terminate_parent) || 
@@ -90,15 +81,15 @@ namespace std {
 			auto __callable = bind(forward<_F>(__f), forward<_Args>(__args)...);
 			native_handle_type __h = __bits::__process_impl<__itag>::fork();
 			if (__h == 0) {
-				embbed(__callable);
+				int __r = __bits::__exec<decltype(__callable()), decltype(__callable)>::invoke(__callable);
 				if (shall_terminate_child(__tf))
-					do_exit();
+					__bits::__do_exit(__r);
 			} else if (__h < 0) {
 				__bits::__throw(errc::resource_unavailable_try_again,
 					"failed to fork() the process");
 			} else {
 				if (shall_terminate_parent(__tf))
-					do_exit();
+					__bits::__do_exit(0);
 				_M_id = process::id(__h);
 			}
 		}

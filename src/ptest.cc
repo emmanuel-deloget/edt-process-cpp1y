@@ -4,6 +4,9 @@
 #include <chrono>
 #include <iomanip>
 
+#include <sys/types.h>
+#include <sys/wait.h>
+
 #include <process>
 #include <named_mutex>
 
@@ -104,6 +107,27 @@ void check_named_mutex()
 	p2.join();
 }
 
+void check_ret_code()
+{
+	std::cout << "======== " << __func__ << std::endl;
+
+	int status; 
+	std::process p([]() -> int {
+		std::cout << "C this process    : " << std::this_process::get_id() << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		std::cout << "C returning 1" << std::endl;
+		return 1;
+	});
+	p.detach();
+	std::cout << "P this process    : " << std::this_process::get_id() << std::endl;
+
+	::pid_t pid = ::wait(&status);
+	std::cout << "P child process   : " << pid << std::endl;
+	std::cout << "P status from C   : " << WEXITSTATUS(status) << std::endl;
+
+	std::cout << std::endl;
+}
+
 int main()
 {
 	std::cout << "======== LEGEND" << std::endl;
@@ -115,6 +139,7 @@ int main()
 	check_id();
 	check_exec();
 	check_hash();
+	check_ret_code();
 
 	check_named_mutex();
 }
