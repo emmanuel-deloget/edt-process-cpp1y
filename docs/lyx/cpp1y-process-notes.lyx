@@ -393,7 +393,7 @@ namespace std {
 
 \begin_layout Plain Layout
 
-  typedef implementation-defined 
+  typedef implementation-defined
 \end_layout
 
 \begin_layout Plain Layout
@@ -460,7 +460,7 @@ namespace std {
 
 \begin_layout Plain Layout
 
-   process(terminate_flag tflag, 
+   process(terminate_flag tflag,
 \end_layout
 
 \begin_layout Plain Layout
@@ -1074,7 +1074,6 @@ DECAY_COPY
 \family default
 \emph default
  being evaluated in the constructing process.
- Any return value from this invocation is ignored.
  [ 
 \emph on
 Note
@@ -1098,7 +1097,6 @@ INVOKE (DECAY_COPY ( std::forward<F>(f)), DECAY_COPY ( std::forward<Args>
 std::terminate
 \family default
  shall be called.
- 
 \begin_inset Newline newline
 \end_inset
 
@@ -1106,16 +1104,31 @@ If the expression (
 \family typewriter
 tf == terminate_flag::terminate_child || tf == terminate_flag::terminate_both
 \family default
-) evaluate to 
+) evaluates to 
 \family typewriter
 true
 \family default
 , the new operating system process calls 
 \family typewriter
-std::exit()
+std::exit(r)
 \family default
- after the invocation.
- 
+ after the invocation, where 
+\family typewriter
+r
+\family default
+ is the return value of the invocation if 
+\family typewriter
+decltype(F(Args...))
+\family default
+ is 
+\family typewriter
+int
+\family default
+ and 
+\family typewriter
+0
+\family default
+ otherwise.
 \begin_inset Newline newline
 \end_inset
 
@@ -1123,16 +1136,15 @@ If the expression (
 \family typewriter
 tf == terminate_flag::terminate_parent || tf == terminate_flag::terminate_both
 \family default
-) evaluate to 
+) evaluates to 
 \family typewriter
 true
 \family default
 , the parent operating system process calls 
 \family typewriter
-std::exit()
+std::exit(0)
 \family default
  if the creation of the new operating system process succeeds.
- 
 \end_layout
 
 \begin_layout Description
@@ -1249,7 +1261,6 @@ INVOKE ( DECAY_COPY ( std::forward<F>(f) ), DECAY_COPY ( std::forward<Args>
 \family default
 \emph default
  shall be a valid expression.
- 
 \end_layout
 
 \begin_layout Description
@@ -1259,7 +1270,7 @@ Effects
 \emph default
 : 
 \family typewriter
-process(terminate_flag::terminate_child, f, args...)
+process(terminate_flag::terminate_child, f, args...);
 \end_layout
 
 \begin_layout Subsubsection*
