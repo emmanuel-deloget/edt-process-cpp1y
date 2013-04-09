@@ -68,6 +68,22 @@ namespace std {
 				return 0;
 			}
 
+			template <typename... _Args>
+			static int fork_exec(const string& __cmd, _Args&&... __args)
+			{
+				int __p = ::fork();
+				if (__p == 0) {
+				vector<char*> __p;
+					__unpack_to_strings(__p, __cmd, __args...);
+					int __e = ::execv(__cmd.c_str(), &__p.front());
+					// we need to destroy the allocated strings or we'll leak memory
+					for_each(__p.begin(), __p.end(), [](char *__s) {
+						delete [] __s;
+					});
+				}
+				return __p;
+			}
+
 		};
 	}
 }

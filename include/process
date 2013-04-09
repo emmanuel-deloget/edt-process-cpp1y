@@ -161,6 +161,32 @@ namespace std {
 			int __e = __bits::__process_impl<__itag>::exec(__cmd, __args...);
 			__bits::__throw(__e, "failed to exec() command");
 		}
+
+		template <typename... _Args>
+		void spawn_wait(const string& __cmd, _Args&&... __args)
+		{
+			process::native_handle_type __h =
+				__bits::__process_impl<__itag>::fork_exec(__cmd, __args...);
+			if (__h < 0) {
+				__bits::__throw(errc::resource_unavailable_try_again,
+					"failed to fork() the process");
+			}
+			auto __r = __bits::__process_impl<__itag>::join(__h);
+			if (__r)
+				__bits::__throw(__r, "failed to join() process");
+		}
+
+		template <typename... _Args>
+		void spawn(const string& __cmd, _Args&&... __args)
+		{
+			process::native_handle_type __h =
+				__bits::__process_impl<__itag>::fork_exec(__cmd, __args...);
+			if (__h < 0) {
+				__bits::__throw(errc::resource_unavailable_try_again,
+					"failed to fork() the process");
+			}
+			// detach the process
+		}
 	}
 
 	template<class _CharT, class _Traits>
