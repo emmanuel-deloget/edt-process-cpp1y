@@ -1283,7 +1283,7 @@ process(terminate_flag::terminate_child, f, args...);
 \begin_layout Subsubsection*
 
 \family typewriter
-thread(thread&& x) noexcept;
+process(process&& x) noexcept;
 \family default
  
 \end_layout
@@ -1781,6 +1781,36 @@ namespace std {
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\begin_layout Plain Layout
+
+  template <typename Args...>
+\end_layout
+
+\begin_layout Plain Layout
+
+   void spawn(const string& cmd, Args&&...
+ args);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  template <typename Args...>
+\end_layout
+
+\begin_layout Plain Layout
+
+   void spawn_wait(const string& cmd, Args&&...
+ args);
+\end_layout
+
+\begin_layout Plain Layout
+
  }
 \end_layout
 
@@ -1887,6 +1917,173 @@ Throws
 system_error
 \family default
  when the underlying system call fails to execute properly.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Error
+\begin_inset space ~
+\end_inset
+
+conditions
+\emph default
+: [ 
+\emph on
+Development note
+\emph default
+: not specified yet.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+template <typename Args...>
+\begin_inset Newline newline
+\end_inset
+
+void spawn(const string& cmd, Args&&...
+ args);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: create a new process and replace its image by a new process image.
+ 
+\family typewriter
+cmd
+\family default
+ specify the command to execute, and 
+\family typewriter
+args...
+
+\family default
+ is the command argument list.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Synchronization
+\emph default
+: The start of the newly loaded process image synchronizes with the correspondin
+g successful 
+\family typewriter
+spawn()
+\family default
+ return.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: 
+\family typewriter
+system_error
+\family default
+ when any underlying system call fails to execute properly.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Error
+\begin_inset space ~
+\end_inset
+
+conditions
+\emph default
+: [ 
+\emph on
+Development note
+\emph default
+: not specified yet.
+ — 
+\emph on
+end note
+\emph default
+ ]
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+\family typewriter
+template <typename Args...>
+\begin_inset Newline newline
+\end_inset
+
+void spawn_wait(const string& cmd, Args&&...
+ args);
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Effects
+\emph default
+: create a new process and replace its image by a new process image and
+ block until the created process has completed.
+ 
+\family typewriter
+cmd
+\family default
+ specify the command to execute, and 
+\family typewriter
+args...
+
+\family default
+ is the command argument list.
+ 
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Synchronization
+\emph default
+: The completion of the created process synchronizes with the corresponding
+ successful 
+\family typewriter
+spawn_wait()
+\family default
+ return.
+\end_layout
+
+\begin_layout Description
+
+\emph on
+Throws
+\emph default
+: 
+\family typewriter
+system_error
+\family default
+ when any underlying system call fails to execute properly.
 \end_layout
 
 \begin_layout Description
