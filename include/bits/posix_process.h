@@ -43,7 +43,7 @@ namespace std {
 
 			static int join(native_handle_type __h)
 			{
-				if (waitpid(__h, NULL, 0) < 0)
+				if (::waitpid(__h, NULL, 0) < 0)
 					return ESRCH;
 				return 0;
 			}
@@ -82,6 +82,13 @@ namespace std {
 					});
 				}
 				return __p;
+			}
+
+			static void detach_process(native_handle_type __h)
+			{
+				thread([](native_handle_type ____h){
+					::waitpid(____h, NULL, 0);
+				}, __h).detach();
 			}
 
 		};

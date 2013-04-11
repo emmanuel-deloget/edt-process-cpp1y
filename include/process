@@ -122,6 +122,7 @@ namespace std {
 		{
 			if (!joinable())
 				__bits::__throw(EINVAL, "cannot detach() detached process");
+			__bits::__process_impl<__itag>::detach_process(_M_id._M_process);
 			_M_id = process::id();
 		}
 
