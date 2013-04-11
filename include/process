@@ -187,6 +187,7 @@ namespace std {
 					"failed to fork() the process");
 			}
 			// detach the process
+			__bits::__process_impl<__itag>::detach_process(__h);
 		}
 	}
 
