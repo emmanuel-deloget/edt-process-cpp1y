@@ -958,7 +958,7 @@ Returns
 \begin_layout Subsubsection*
 
 \family typewriter
-template <> struct hash<thread::id>;
+template <> struct hash<process::id>;
 \end_layout
 
 \begin_layout Description
@@ -1187,7 +1187,7 @@ Throws
 \family typewriter
 system_error
 \family default
- if unable to start the new thread.
+ if unable to create and start the new process.
  
 \end_layout
 
